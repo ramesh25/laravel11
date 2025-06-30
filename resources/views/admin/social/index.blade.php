@@ -13,11 +13,11 @@
     </a>
 
     <!-- Create Button -->
-    <a href="{{ route('category.create') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded hover:bg-blue-700 transition">
+    <a href="{{ route('social.create') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded hover:bg-blue-700 transition">
       <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
       </svg>
-      Create Category
+      Create Social
     </a>
   </div>
 
@@ -31,9 +31,9 @@
     </button>
 
     <div id="actionDropdown" class="hidden absolute right-0 mt-2 w-40 bg-white border rounded shadow-lg z-50">
-      <a href="javascript:void(0);" onclick="return actionSubmit('{{ url('admin/category/update-publish/1') }}');" class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100" role="menuitem">Publish</a>
-      <a href="javascript:void(0);" onclick="return actionSubmit('{{ url('admin/category/update-publish/0') }}');" class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100" role="menuitem">Unpublish</a>
-      <a href="javascript:void(0);" onclick="return actionConfirm('{{ url('admin/category/bulk_delete') }}','Delete');" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-100" role="menuitem">Delete</a>
+      <a href="javascript:void(0);" onclick="return actionSubmit('{{ url('admin/social/update-publish/1') }}');" class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100" role="menuitem">Publish</a>
+      <a href="javascript:void(0);" onclick="return actionSubmit('{{ url('admin/social/update-publish/0') }}');" class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100" role="menuitem">Unpublish</a>
+      <a href="javascript:void(0);" onclick="return actionConfirm('{{ url('admin/social/bulk_delete') }}','Delete');" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-100" role="menuitem">Delete</a>
     </div>
   </div>
 </div>
@@ -60,7 +60,7 @@
 <!-- Table Card Component -->
 <div class="bg-white shadow rounded-lg p-6">
   <div class="flex justify-between items-center mb-4">
-    <h2 class="text-lg font-semibold text-gray-700">Category List</h2>
+    <h2 class="text-lg font-semibold text-gray-700">Social List</h2>
     <input type="text" id="tableSearch" onkeyup="filterTableAndResetPagination()" placeholder="Search..." class="border px-3 py-1 rounded focus:outline-none focus:ring w-1/3">
   </div>
   @if(count($models)>0)
@@ -75,7 +75,6 @@
           </th>
           <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
           <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Image</th>
-          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Childs</th>
           <th class="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
         </tr>
       </thead>
@@ -87,11 +86,10 @@
           <td class="px-4 py-2">
             <img src="{{ asset($m->image) }}" class="w-20 h-10" alt="User">
           </td>
-          <td class="px-4 py-2"><a href="{{ url('admin/category/child', array('id'=>$m->id)) }}">{{ $m->childs->count() }}</a></td>
           <td class="px-4 py-2 text-right space-x-2">
-            <a href="{{ route('category.edit',$m->id) }}" class="px-3 py-1 bg-blue-500 text-white text-xs rounded hover:bg-blue-600">Edit</a>
+            <a href="{{ route('social.edit',$m->id) }}" class="px-3 py-1 bg-blue-500 text-white text-xs rounded hover:bg-blue-600">Edit</a>
             {!! $publish[$m->publish] !!}
-            <a title="Delete Item" onclick="javascript:return confirm('Are you sure to delete ?')" href="{{ url('admin/category/single-delete', $m->id) }}" class="px-3 py-1 bg-red-500 text-white text-xs rounded hover:bg-red-600"><i class="mdi mdi-delete"></i>Delete</a>
+            <a title="Delete Item" onclick="javascript:return confirm('Are you sure to delete ?')" href="{{ url('admin/social/single-delete', $m->id) }}" class="px-3 py-1 bg-red-500 text-white text-xs rounded hover:bg-red-600"><i class="mdi mdi-delete"></i>Delete</a>
           </td>
         </tr>
         @endforeach

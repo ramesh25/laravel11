@@ -23,7 +23,7 @@
         <img src="https://via.placeholder.com/40" alt="Profile" class="rounded-full w-10 h-10"/>
       </button>
       <div id="profileDropdown" class="absolute right-0 mt-2 w-48 bg-white border rounded shadow-md hidden z-40">
-        <a href="#" class="block px-4 py-2 hover:bg-gray-100">Profile</a>
+        <a href="@if(!empty(Auth::user()->id)){{ url('admin/profile', Auth::user()->id) }} @else # @endif" class="block px-4 py-2 hover:bg-gray-100">Profile</a>
         <a href="#" class="block px-4 py-2 hover:bg-gray-100">Settings</a>
         <form method="POST" action="{{ route('logout') }}">
             @csrf
