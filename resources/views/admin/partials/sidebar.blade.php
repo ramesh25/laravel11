@@ -7,8 +7,8 @@
       </svg>
     </button>
   </div>
-
   <div class="p-4 text-lg font-bold border-b">Admin Panel</div>
+    
     <nav class="p-4 space-y-2">
       <a href="{{ url('admin/dashboard') }}" class="block px-4 py-2 rounded hover:bg-gray-200">Dashboard</a>
       <a href="{{ url('admin/nav') }}" class="block px-4 py-2 rounded hover:bg-gray-200">Menu</a>
@@ -17,14 +17,20 @@
       <a href="{{ url('admin/advertise') }}" class="block px-4 py-2 rounded hover:bg-gray-200">Advertise</a>
       <a href="#" class="block px-4 py-2 rounded hover:bg-gray-200">Post</a>
 
+      <a href="#" class="block px-4 py-2 rounded hover:bg-gray-200">Menu</a>
+      <a href="{{ url('admin/admin') }}" class="block px-4 py-2 rounded hover:bg-gray-200">Admin</a>
+      <a href="{{ url('admin/page') }}" class="block px-4 py-2 rounded hover:bg-gray-200">Page</a>
+      <a href="{{ url('admin/category') }}" class="block px-4 py-2 rounded hover:bg-gray-200">Category</a>
+      <a href="{{ url('admin/news') }}" class="block px-4 py-2 rounded hover:bg-gray-200">News</a>
       <!-- Dropdown -->
       <div>
         <button onclick="toggleDropdown('settingDropdown')" class="w-full text-left px-4 py-2 rounded hover:bg-gray-200">Setting ▼</button>
         <div id="settingDropdown" class="ml-4 mt-1 space-y-1 hidden">
-          <a href="#" class="block px-4 py-1 rounded hover:bg-gray-200">Roles</a>
-          <a href="#" class="block px-4 py-1 rounded hover:bg-gray-200">Setting</a>
-          <a href="#" class="block px-4 py-1 rounded hover:bg-gray-200">Social</a>
+          <a href="{{ url('admin/roles') }}" class="block px-4 py-1 rounded hover:bg-gray-200">Roles</a>
+          <a href="{{ url('admin/setting') }}" class="block px-4 py-1 rounded hover:bg-gray-200">Setting</a>
+          <a href="{{ url('admin/social') }}" class="block px-4 py-1 rounded hover:bg-gray-200">Social</a>
         </div>
       </div>
     </nav>
+    
 </div>

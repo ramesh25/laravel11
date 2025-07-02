@@ -5,7 +5,7 @@
   <!-- Left side: Back + Create -->
   <div class="space-x-2">
     <!-- Back Button -->
-    <a href="{{ url('admin/category') }}" class="inline-flex items-center px-4 py-2 bg-cyan-600 text-white text-sm font-medium rounded hover:bg-cyan-700 transition">
+    <a href="{{ url('admin/news') }}" class="inline-flex items-center px-4 py-2 bg-cyan-600 text-white text-sm font-medium rounded hover:bg-cyan-700 transition">
       <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
       </svg>
@@ -33,75 +33,35 @@
   @endif
 </div>
 
-<form action="{{ route('category.update', $model->id) }}" method="POST" enctype="multipart/form-data">
-  @csrf
-  @method('PUT')
-  <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
 
+
+<form action="{{ route('news.store') }}" method="POST" enctype="multipart/form-data">
+  @csrf
+  <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+    
     <!-- Left Column (8 cols) -->
     <div class="md:col-span-8">
       <div class="bg-white p-6 rounded shadow">
         <h2 class="text-lg font-semibold text-gray-700 mb-4">Basic Information</h2>
 
-        <div class="mb-4 md:flex md:items-center">
-          <label for="parent_id" class="md:w-1/4 font-medium text-gray-700">Parent</label>
-          <div class="md:w-3/4">
-            <select name="parent_id" id="parent_id" class="w-full border border-gray-300 rounded px-4 py-2 focus:ring focus:border-blue-400 @if(isset($model) && $model->id == 1) bg-gray-100 cursor-not-allowed @endif"
-            @if(isset($model) && $model->id == 1) disabled @endif>
-            <?php
-              $options = [0 => 'None'] + TreeHelper::selectOptions('categories', 0, isset($model) ? $model->id : null, null, 'title', 'asc');
-              foreach ($options as $key => $value) {
-                $selected = (old('parent_id', isset($model) ? $model->parent_id : ($parent_id ?? 0)) == $key) ? 'selected' : '';
-                echo "<option value=\"$key\" $selected>$value</option>";
-              }
-            ?>
-          </select>
-
-            @error('parent_id')
-              <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
-            @enderror
-          </div>
-        </div>
-
         <!-- Title -->
         <div class="mb-4">
           <label class="block text-sm font-medium text-gray-700 mb-1">Title <span class="text-red-500">*</span></label>
-          <input type="text" name="title" value="{{ old('title', $model->title) }}" class="w-full border rounded px-4 py-2 focus:ring focus:border-blue-400" required>
+          <input type="text" name="title" value="{{ old('title') }}" class="w-full border rounded px-4 py-2 focus:ring focus:border-blue-400">
           @error('title') <p class="text-sm text-red-500 mt-1">{{ $message }}</p> @enderror
         </div>
 
         <!-- Image -->
-        <div class="mb-4 md:flex md:items-start">
-          <label for="image" class="md:w-1/4 font-medium text-gray-700">Image<span class="text-red-500">*</span></label>
-          <div class="md:w-1/2">
-            <input type="file" name="image" id="image" onchange="readURL(this);" 
-              class="w-full text-sm text-gray-700 border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-400"
-            >
-            @error('image')
-              <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
-            @enderror
-          </div>
-
-          {{-- Preview and Delete Checkbox --}}
-          <div class="md:w-1/4 mt-4 md:mt-0">
-            @if (isset($model) && $model->image)
-              <a href="{{ asset($model->upload . $model->image) }}" data-lumos="gallery1">
-                <img id="previewimg" src="{{ asset($model->upload . $model->image) }}" class="w-36 h-20 object-cover rounded border" />
-              </a>
-              <div class="mt-2 flex items-center space-x-2">
-                <input type="checkbox" name="delete_image" id="delete_image" value="1" class="text-blue-600 rounded">
-                <label for="delete_image" class="text-sm text-gray-700">Remove Image</label>
-              </div>
-            @else
-              <img id="previewimg" src="" class="w-36 h-20 object-cover rounded border" />
-            @endif
-          </div>
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700 mb-1">Image</label>
+          <input type="file" name="image" class="w-full border rounded px-4 py-2 focus:ring focus:border-blue-400">
+          @error('image') <p class="text-sm text-red-500 mt-1">{{ $message }}</p> @enderror
         </div>
 
         <!-- Description -->
         <div class="mb-4">
           <label class="block text-sm font-medium text-gray-700 mb-1">Description</label>
-            <textarea name="description" id="editor" class="w-full">{{ old('description', $model->description) }}</textarea>
+          <textarea name="description" id="editor" class="w-full">{{ old('description') }}</textarea>
           @error('description') <p class="text-sm text-red-500 mt-1">{{ $message }}</p> @enderror
         </div>
       </div>
@@ -110,39 +70,61 @@
     <!-- Right Column (4 cols) -->
     <div class="md:col-span-4">
       <div class="bg-white p-6 rounded shadow">
-        <h2 class="text-lg font-semibold text-gray-700 mb-4">SEO & Settings</h2>
+        <h2 class="text-lg font-semibold text-gray-700 mb-4">Categories</h2>
 
+        <div class="mb-4">
+          @error('categories')
+            <p class="text-sm text-red-600 mb-2">{{ $message }}</p>
+          @enderror
+
+          <div class="space-y-2">
+            <?php
+              $checkeds = [];
+              echo TreeHelper::checkbox(
+                $name = 'categories[]',
+                $checkeds,
+                $table = 'categories',
+                $base_id = 0,
+                $terms = null,
+                $order_by = 'title',
+                $order = 'asc'
+              );
+            ?>
+          </div>
+        </div>
+
+        <h2 class="text-lg font-semibold text-gray-700 mb-4">SEO & Settings</h2>
         <!-- Meta Title -->
         <div class="mb-4">
           <label class="block text-sm font-medium text-gray-700 mb-1">Meta Title</label>
-          <input type="text" name="meta_title" value="{{ old('meta_title', $model->meta_title) }}" class="w-full border rounded px-4 py-2 focus:ring focus:border-blue-400">
+          <input type="text" name="meta_title" value="{{ old('meta_title') }}" class="w-full border rounded px-4 py-2 focus:ring focus:border-blue-400">
           @error('meta_title') <p class="text-sm text-red-500 mt-1">{{ $message }}</p> @enderror
         </div>
 
         <!-- Meta Keywords -->
         <div class="mb-4">
           <label class="block text-sm font-medium text-gray-700 mb-1">Meta Keywords</label>
-          <input type="text" name="meta_keywords" value="{{ old('meta_keywords', $model->meta_keywords) }}" class="w-full border rounded px-4 py-2 focus:ring focus:border-blue-400">
+          <input type="text" name="meta_keywords" value="{{ old('meta_keywords') }}" class="w-full border rounded px-4 py-2 focus:ring focus:border-blue-400">
           @error('meta_keywords') <p class="text-sm text-red-500 mt-1">{{ $message }}</p> @enderror
         </div>
 
         <!-- Meta Description -->
         <div class="mb-4">
           <label class="block text-sm font-medium text-gray-700 mb-1">Meta Description</label>
-          <textarea name="meta_description" rows="3" class="w-full border rounded px-4 py-2 focus:ring focus:border-blue-400">{{ old('meta_description', $model->meta_description) }}</textarea>
+          <textarea name="meta_description" rows="3" class="w-full border rounded px-4 py-2 focus:ring focus:border-blue-400">{{ old('meta_description') }}</textarea>
           @error('meta_description') <p class="text-sm text-red-500 mt-1">{{ $message }}</p> @enderror
         </div>
-
-        <!-- Display on Home -->
-        <div class="mb-4">
-          <label class="block text-sm font-medium text-gray-700 mb-2">Display on Homepage</label>
+        
+        <!-- Highlight News -->
+        <div class="mb-4 mt-4">
+          <label class="block text-sm font-medium text-gray-700 mb-2">Highlight News</label>
           <div class="flex space-x-6">
             <label class="inline-flex items-center">
-              <input type="radio" name="display_home" value="1" class="text-blue-600" {{ old('display_home', $model->display_home) == '1' ? 'checked' : '' }}>
+              <input type="radio" name="highlited_news" value="1" class="text-blue-600" {{ old('highlited_news') === '1' ? 'checked' : '' }}>
               <span class="ml-2 text-sm text-gray-700">Yes</span>
             </label>
             <label class="inline-flex items-center">
-              <input type="radio" name="display_home" value="0" class="text-blue-600" {{ old('display_home', $model->display_home) == '0' ? 'checked' : '' }}>
+              <input type="radio" name="highlited_news" value="0" class="text-blue-600" {{ old('highlited_news') === '0' ? 'checked' : 'checked' }}>
               <span class="ml-2 text-sm text-gray-700">No</span>
             </label>
           </div>
@@ -152,21 +134,23 @@
         <div class="mb-4 flex items-center">
           <label class="text-sm font-medium text-gray-700 mr-4 w-24">Status</label>
           <select name="publish" class="flex-1 border rounded px-4 py-2 focus:ring focus:border-blue-400">
-            <option value="1" {{ old('publish', $model->publish) == '1' ? 'selected' : '' }}>Publish</option>
-            <option value="0" {{ old('publish', $model->publish) == '0' ? 'selected' : '' }}>Unpublish</option>
+            <option value="1" {{ old('publish', '1') == '1' ? 'selected' : '' }}>Publish</option>
+            <option value="0" {{ old('publish') == '0' ? 'selected' : '' }}>Unpublish</option>
           </select>
           @error('publish') <p class="text-sm text-red-500 mt-1 w-full">{{ $message }}</p> @enderror
         </div>
 
         <div class="mt-6">
-          <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">Update Category</button>
+          <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">Save News</button>
         </div>
 
       </div>
     </div>
 
   </div>
+  
 </form>
+
 @endsection
 @section('script')
 <script src="{{ asset('admin/tinymce/tinymce.min.js') }}"></script>

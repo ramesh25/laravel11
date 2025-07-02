@@ -88,3 +88,29 @@ function readURL(input) {
     reader.readAsDataURL(input.files[0]);
   }
 }
+
+// preview for image upload 2
+    function readURL1(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+              document.getElementById('previewimg1').src = e.target.result;
+            };
+
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    // preview for image upload 3
+    function readURL2(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+              document.getElementById('previewimg2').src = e.target.result;
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }

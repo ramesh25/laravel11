@@ -139,38 +139,46 @@ class TreeHelper {
         return self::$result;
     }
 
-    public static function checkbox($name, $checkeds, $table, $base_id = NULL, $terms = NULL, $order_by = NULL, $order = NULL) {
-        if (!$terms)
-            $terms = '1=1';
-        $models = DB::table($table)
+    public static function checkbox($name, $checkeds, $table, $base_id = NULL, $terms = NULL, $order_by = NULL, $order = NULL)
+        {
+            if (!$terms)
+                $terms = '1=1';
+
+            $models = DB::table($table)
                 ->where('parent_id', $base_id)
                 ->whereRaw($terms)
                 ->orderBy($order_by, $order)
                 ->get();
 
-        if (sizeof($models) > 0) {
-            self::$result .= '<ul>';
-            foreach ($models as $m) {
+            if ($models->count() > 0) {
+                self::$result .= '<ul class="ml-4 space-y-1">';
+                foreach ($models as $m) {
 
-                $childs = DB::table($table)
+                    $childs = DB::table($table)
                         ->where('parent_id', $m->id)
                         ->whereRaw($terms)
                         ->orderBy($order_by, $order)
-                        ->get(array('id'));
-                $checked = in_array($m->id, $checkeds) ? true : false;
-                self::$result .= "<li><label>";
-                if (sizeof($childs) > 0) {
-                    self::$result .= Form::checkbox($name, $m->id, $checked) . ' ' . $m->title;
-                    TreeHelper::checkbox($name, $checkeds, $table, $m->id, $terms, $order_by, $order);
-                } else {
-                    self::$result .= Form::checkbox($name, $m->id, $checked) . ' ' . $m->title;
+                        ->get();
+
+                    $checked = in_array($m->id, $checkeds) ? 'checked' : '';
+
+                    self::$result .= '<li>';
+                    self::$result .= '<label class="inline-flex items-center space-x-2">';
+                    self::$result .= "<input type=\"checkbox\" name=\"{$name}\" value=\"{$m->id}\" class=\"rounded border-gray-300 text-blue-600 focus:ring focus:ring-blue-200\" {$checked}>";
+                    self::$result .= "<span class=\"text-gray-700\">{$m->title}</span>";
+                    self::$result .= '</label>';
+
+                    if ($childs->count() > 0) {
+                        TreeHelper::checkbox($name, $checkeds, $table, $m->id, $terms, $order_by, $order);
+                    }
+
+                    self::$result .= '</li>';
                 }
-                self::$result .= '</label></li>';
+                self::$result .= '</ul>';
             }
-            self::$result .= '</ul>';
+
+            return self::$result;
         }
-        return self::$result;
-    }
 
     public static function id($table, $id, $terms = NULL, $order_by = NULL, $order = NULL) {
         if (!$terms)

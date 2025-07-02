@@ -4,37 +4,13 @@
 <div class="flex justify-between items-center mb-4">
   <!-- Left side: Back + Create -->
   <div class="space-x-2">
-    <!-- Back Button -->
-    <a href="{{ url()->previous() }}" class="inline-flex items-center px-4 py-2 bg-cyan-600 text-white text-sm font-medium rounded hover:bg-cyan-700 transition">
-      <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
-      </svg>
-      Back
-    </a>
-
     <!-- Create Button -->
-    <a href="{{ route('category.create') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded hover:bg-blue-700 transition">
+    <a href="{{ route('permission.create') }}" class="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded hover:bg-blue-700 transition">
       <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
       </svg>
-      Create Category
+      Create Permission
     </a>
-  </div>
-
-  <!-- Right side: Dropdown Action Button -->
-  <div class="relative inline-block text-left">
-    <button onclick="toggleActionDropdown()" class="inline-flex justify-center w-full px-4 py-2 bg-red-600 text-white text-sm font-medium rounded hover:bg-cyan-600 transition">
-      Action
-      <svg class="w-4 h-4 ml-2 -mr-1" fill="currentColor" viewBox="0 0 20 20">
-        <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 11.586l3.71-4.356a.75.75 0 011.14.98l-4.25 5a.75.75 0 01-1.14 0l-4.25-5a.75.75 0 01.02-1.06z" clip-rule="evenodd" />
-      </svg>
-    </button>
-
-    <div id="actionDropdown" class="hidden absolute right-0 mt-2 w-40 bg-white border rounded shadow-lg z-50">
-      <a href="javascript:void(0);" onclick="return actionSubmit('{{ url('admin/category/update-publish/1') }}');" class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100" role="menuitem">Publish</a>
-      <a href="javascript:void(0);" onclick="return actionSubmit('{{ url('admin/category/update-publish/0') }}');" class="text-gray-700 block px-4 py-2 text-sm hover:bg-gray-100" role="menuitem">Unpublish</a>
-      <a href="javascript:void(0);" onclick="return actionConfirm('{{ url('admin/category/bulk_delete') }}','Delete');" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-100" role="menuitem">Delete</a>
-    </div>
   </div>
 </div>
 
@@ -60,7 +36,7 @@
 <!-- Table Card Component -->
 <div class="bg-white shadow rounded-lg p-6">
   <div class="flex justify-between items-center mb-4">
-    <h2 class="text-lg font-semibold text-gray-700">Category List</h2>
+    <h2 class="text-lg font-semibold text-gray-700">Permission List</h2>
     <input type="text" id="tableSearch" onkeyup="filterTableAndResetPagination()" placeholder="Search..." class="border px-3 py-1 rounded focus:outline-none focus:ring w-1/3">
   </div>
   @if(count($models)>0)
@@ -70,12 +46,10 @@
     <table class="min-w-full divide-y divide-gray-200" id="userTable">
       <thead class="bg-gray-50">
         <tr>
-          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">S.N.
             <input type="checkbox" name="select-all" id="select-all" class="rounded border-gray-300" onclick="toggleSelect()">
           </th>
-          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
-          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Image</th>
-          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Childs</th>
+          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Permission Name</th>
           <th class="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
         </tr>
       </thead>
@@ -83,15 +57,10 @@
         @foreach($models as $key => $m)
         <tr>
           <td class="px-4 py-2">{{ ++$key }} <input type="checkbox" name="ids[]" value="{{ $m->id }}" class="rounded border-gray-300"></td>
-          <td class="px-4 py-2">{{ $m->title }}</td>
-          <td class="px-4 py-2">
-            <img src="{{ asset($m->image) }}" class="w-20 h-10" alt="User">
-          </td>
-          <td class="px-4 py-2"><a href="{{ url('admin/category/child', array('id'=>$m->id)) }}">{{ $m->childs->count() }}</a></td>
+          <td class="px-4 py-2">{{ $m->name }}</td>
           <td class="px-4 py-2 text-right space-x-2">
-            <a href="{{ route('category.edit',$m->id) }}" class="px-3 py-1 bg-blue-500 text-white text-xs rounded hover:bg-blue-600">Edit</a>
-            {!! $publish[$m->publish] !!}
-            <a title="Delete Item" onclick="javascript:return confirm('Are you sure to delete ?')" href="{{ url('admin/category/single-delete', $m->id) }}" class="px-3 py-1 bg-red-500 text-white text-xs rounded hover:bg-red-600"><i class="mdi mdi-delete"></i>Delete</a>
+            <a href="{{ route('permission.edit', $m->id) }}" class="px-3 py-1 bg-blue-500 text-white text-xs rounded hover:bg-blue-600">Edit</a>
+            <a title="Delete Item" onclick="javascript:return confirm('Are you sure to delete ?')" href="{{ url('admin/permission/delete', $m->id) }}" class="px-3 py-1 bg-red-500 text-white text-xs rounded hover:bg-red-600"><i class="mdi mdi-delete"></i>Delete</a>
           </td>
         </tr>
         @endforeach
