@@ -11,10 +11,10 @@
   <div class="p-4 text-lg font-bold border-b">Admin Panel</div>
     <nav class="p-4 space-y-2">
       <a href="{{ url('admin/dashboard') }}" class="block px-4 py-2 rounded hover:bg-gray-200">Dashboard</a>
-      <a href="#" class="block px-4 py-2 rounded hover:bg-gray-200">Menu</a>
+      <a href="{{ url('admin/nav') }}" class="block px-4 py-2 rounded hover:bg-gray-200">Menu</a>
       <a href="#" class="block px-4 py-2 rounded hover:bg-gray-200">Admin</a>
-      <a href="#" class="block px-4 py-2 rounded hover:bg-gray-200">Slider</a>
       <a href="{{ url('admin/category') }}" class="block px-4 py-2 rounded hover:bg-gray-200">Category</a>
+      <a href="{{ url('admin/advertise') }}" class="block px-4 py-2 rounded hover:bg-gray-200">Advertise</a>
       <a href="#" class="block px-4 py-2 rounded hover:bg-gray-200">Post</a>
 
       <!-- Dropdown -->
