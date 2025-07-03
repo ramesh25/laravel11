@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class PermissionRequest extends FormRequest
 {
@@ -20,9 +21,13 @@ class PermissionRequest extends FormRequest
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
-    {
+    {   
+        $permissionId = $this->route('permission');
         return [
-            'name' => 'required|unique:permissions,name',
+             'name' => [
+                'required',
+                Rule::unique('permissions', 'name')->ignore($permissionId),
+            ],
         ];
     }
 }

@@ -29,23 +29,23 @@ class SocialController extends Controller
     public function index()
     {
         $title = $this->title. ' Management';
-        $bredcrumb = $this->title;
+        $breadcrumb = $this->title;
         $publish = $this->publish;
 
         $models = Social::orderBy('position', 'desc')
         ->paginate(10);
 
-        return view($this->listing_page, compact('title', 'models', 'bredcrumb', 'publish', 'title'));
+        return view($this->listing_page, compact('title', 'models', 'breadcrumb', 'publish', 'title'));
     }
 
 
     public function create()
     {
         $title = $this->title. ' Create';
-        $bredcrumb = 'Cagetory';
-        $bredcrumb .= ' / Create';
+        $breadcrumb = 'Cagetory';
+        $breadcrumb .= ' / Create';
         $publish = $this->publish;
-        return view($this->create_form, compact('title', 'bredcrumb', 'publish'));
+        return view($this->create_form, compact('title', 'breadcrumb', 'publish'));
     }
 
     /**
@@ -96,11 +96,11 @@ class SocialController extends Controller
     public function edit($id)
     {
         $title = $this->title. ' Edit';
-        $bredcrumb = $this->title;
-        $bredcrumb .= ' / Update';
+        $breadcrumb = $this->title;
+        $breadcrumb .= ' / Update';
 
         $model = Social::find($id);
-        return view($this->update_form, compact('title', 'bredcrumb', 'model'));
+        return view($this->update_form, compact('title', 'breadcrumb', 'model'));
     }
 
     /**

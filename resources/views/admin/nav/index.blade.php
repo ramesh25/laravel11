@@ -64,6 +64,7 @@
     <h2 class="text-lg font-semibold text-gray-700">Menu List</h2>
     <input type="text" id="tableSearch" onkeyup="filterTableAndResetPagination()" placeholder="Search..." class="border px-3 py-1 rounded focus:outline-none focus:ring w-1/3">
   </div>
+
   @if(count($models)>0)
   <div class="overflow-x-auto">
     <form id="frmListing" method="POST">
@@ -75,24 +76,24 @@
             <input type="checkbox" name="select-all" id="select-all" class="rounded border-gray-300" onclick="toggleSelect()">
           </th>
           <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
-          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Image</th>
-           <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Link</th>
+          <th class="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Sub Menu</th>
           <th class="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
         </tr>
       </thead>
+      <?php $sort_orders = '';?>
       <tbody class="bg-white divide-y divide-gray-200" id="tableBody">
         @foreach($models as $key => $m)
+        <?php $sort_orders.=$m->position.',';?>
         <tr>
           <td class="px-4 py-2">{{ ++$key }} <input type="checkbox" name="ids[]" value="{{ $m->id }}" class="rounded border-gray-300"></td>
           <td class="px-4 py-2">{{ $m->title }}</td>
           <td class="px-4 py-2">
-            <img src="{{ asset($m->image) }}" class="w-20 h-10" alt="User">
+            <a title="Sub Menu"  href="{{ route('admin.nav.sub', array('id'=>$m->id)) }}" class="px-3 py-1 bg-red-500 text-white text-xs rounded hover:bg-red-600"><i class="mdi mdi-delete"></i>{{ $m->submenu->count() }}</a>
           </td>
-          <td class="px-4 py-2">{{ $m->link }}</td>
           <td class="px-4 py-2 text-right space-x-2">
-            <a href="{{ route('advertise.edit',$m->id) }}" class="px-3 py-1 bg-blue-500 text-white text-xs rounded hover:bg-blue-600">Edit</a>
+            <a href="{{ route('nav.edit',$m->id) }}" class="px-3 py-1 bg-blue-500 text-white text-xs rounded hover:bg-blue-600">Edit</a>
             {!! $publish[$m->publish] !!}
-            <a title="Delete Item" onclick="javascript:return confirm('Are you sure to delete ?')" href="{{ url('admin/advertise/single-delete', $m->id) }}" class="px-3 py-1 bg-red-500 text-white text-xs rounded hover:bg-red-600"><i class="mdi mdi-delete"></i>Delete</a>
+            <a title="Delete Item" onclick="javascript:return confirm('Are you sure to delete ?')" href="{{ url('admin/nav/single-delete', $m->id) }}" class="px-3 py-1 bg-red-500 text-white text-xs rounded hover:bg-red-600"><i class="mdi mdi-delete"></i>Delete</a>
           </td>
         </tr>
         @endforeach
@@ -113,6 +114,21 @@
 </div>
 
 @endsection
-<!-- @section('script')
-<script src="{{ asset('admin/assets/js/common.js') }}"></script>
-@endsection -->
+@section('script')
+<script src="{{ asset('admin/js/sort.js') }}" type="text/javascript"></script>
+<script>
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+    $(document).ready(function(){
+        $('#sortable').tableDnD({
+            onDrop: function(table, row) {
+                //alert($.tableDnD.serialize());
+                $.post('{{url("admin/ajax/drag-drop-sorting") }}', {ids_order: $.tableDnD.serialize(), sort_orders:'<?php echo $sort_orders;?>', table:'navs' } );
+            }
+        });
+    });
+</script>
+@endsection

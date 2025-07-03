@@ -16,6 +16,7 @@ class TreeHelper {
     public static function selectOptions($table, $base_id, $id = null, $terms = NULL, $order_by = NULL, $order = NULL) {
         if (!$terms)
             $terms = '1=1';
+
         if ($id) {
             $models = DB::table($table)
                     ->where('id', '!=', $id)

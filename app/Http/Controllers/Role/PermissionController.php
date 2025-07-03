@@ -19,9 +19,9 @@ class PermissionController extends Controller
     {
         $models = Permission::orderBy('id','DESC')->get();
          $title = $this->title. ' Management';
-        $bredcrumb = ABS . $this->title;
-        return view('admin.role.permission_index',compact('models','title', 'bredcrumb'))
-            ->with('i', ($request->input('page', 1) - 1) * 5);
+        $breadcrumb = ABS . $this->title;
+        return view('admin.role.permission_index',compact('models','title', 'breadcrumb'))
+            ->with('i', ($request->input('page', 1) - 1) * 10);
     }
 
 
@@ -34,9 +34,9 @@ class PermissionController extends Controller
     {
 
         $title = $this->title. ' Create';
-        $bredcrumb = $this->title;
-        $bredcrumb .= ABS . ' / Create';
-        return view('admin.role.permission_create',compact('title', 'bredcrumb'));
+        $breadcrumb = $this->title;
+        $breadcrumb .= ABS . ' / Create';
+        return view('admin.role.permission_create',compact('title', 'breadcrumb'));
     }
 
 
@@ -78,10 +78,10 @@ class PermissionController extends Controller
         $model = Permission::find($id);
         
         $title = $this->title. ' Edit';
-        $bredcrumb = $this->title;
-        $bredcrumb .= ABS . ' / Update';
+        $breadcrumb = $this->title;
+        $breadcrumb .= ABS . ' / Update';
 
-        return view('admin.role.permission_edit',compact('model', 'title', 'bredcrumb'));
+        return view('admin.role.permission_edit',compact('model', 'title', 'breadcrumb'));
     }
 
 
