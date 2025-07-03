@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-<<<<<<< HEAD
 use App\Models\Advertise;
 use App\Models\Page;
 
@@ -19,14 +18,5 @@ class DashboardController extends Controller
         $breadcrumb = 'Dashboard';
 
         return view('admin.dashboard', compact('title', 'countAdvertise', 'countPage', 'breadcrumb'));
-=======
-
-class DashboardController extends Controller
-{
-    //
-    public function index(){
-        $breadcrumb ='Dashboard';
-        return view('admin.dashboard',compact('breadcrumb'));
->>>>>>> 0dd5e1624b3f993759dfa50f0255d37b18785ffa
     }
 }

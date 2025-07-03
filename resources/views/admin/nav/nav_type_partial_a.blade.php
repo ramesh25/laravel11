@@ -5,68 +5,82 @@ if (!Request::ajax()) {
 }
 ?>
 @if ($type == 'pages')
-    <div class="mb-4 flex gap-4">
-        <div class="w-1/2">
-            <label class="block text-sm font-medium text-gray-700">Select Page</label>
-            <div id="search_result">
-                <select name="type_id[]" id="search_result" class="w-full border rounded px-4 py-2">
-                    @foreach (\App\Models\Page::pluck('title', 'id') as $id => $title)
-                        <option value="{{ $id }}">{{ $title }}</option>
-                    @endforeach
-                </select>
-            </div>
-        </div>
-        <div class="w-1/2">
-            <label class="block text-sm font-medium text-gray-700">Search</label>
-            <input type="text" name="search_txt"  onkeyup="searchByTitle('pages', this.value)" class="w-full border rounded px-4 py-2" placeholder="Search..." />
-        </div>
+<div class="mb-4 md:flex md:items-start">
+    <label for="type_id" class="md:w-1/4 font-medium text-gray-700">
+    Select Contents <span class="text-red-500">*</span>
+    </label>
+
+    <div class="md:w-1/4">
+        <select name="type_id[]" id="type_id" class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring focus:border-blue-400">
+          @foreach(\App\Models\Page::pluck('title', 'id') as $id => $title)
+            <option value="{{ $id }}" {{ in_array($id, old('type_id', [])) ? 'selected' : '' }}>
+              {{ $title }}
+            </option>
+          @endforeach
+        </select>
+        @error('type_id')
+          <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+        @enderror
     </div>
-@elseif ($type == 'categories')
-    <div class="mb-4 flex gap-4">
-        <div class="w-1/2">
-            <label class="block text-sm font-medium text-gray-700">Select Category</label>
-            <div id="search_result">
-                <select name="type_id[]" class="w-full border rounded px-4 py-2">
-                    @foreach (\App\Models\Category::pluck('title', 'id') as $id => $title)
-                        <option value="{{ $id }}">{{ $title }}</option>
-                    @endforeach
-                </select>
-            </div>
-        </div>
-        <div class="w-1/2">
-            <label class="block text-sm font-medium text-gray-700">Search</label>
-            <input type="text" name="search_txt" onkeyup="searchByTitle('categories', this.value)" class="w-full border rounded px-4 py-2" placeholder="Search..." />
-        </div>
-    </div>
-    
-@elseif ($type == 'routes')
-<div class="mb-4 flex gap-4">
-    <div class="w-1/2">
-        <label class="block text-sm font-medium text-gray-700">Select Contents</label>
-        <?php
-            $options = array(
-                '' => '- - - Select - - -',
-                '/' => 'Home',
-                'contact-us' => 'Contact Us',
-                'pages' => 'Pages',
-                'categories' => 'Categories',
-                'sale-properties' => 'Sale Properties',
-                'rental-properties' => 'Rental Properties',
-            );
-            ?>
-        <div id="search_result">
-            <select name="type_id[]" class="w-full border rounded px-4 py-2">
-                @foreach ($options as $id => $title)
-                    <option value="{{ $id }}">{{ $title }}</option>
-                @endforeach
-            </select>
-        </div>
-    </div>
-    <div class="w-1/2">
-        <label class="block text-sm font-medium text-gray-700">Search</label>
-        <input type="text" name="search_txt" onkeyup="searchByTitle('categories', this.value)" class="w-full border rounded px-4 py-2" placeholder="Search..." />
+
+    <div class="md:w-1/4 mt-4 md:mt-0 md:ml-4">
+        <input type="text" name="search_txt" placeholder="Search..." onkeyup='searchByTitle("pages", this.value);' class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring focus:border-blue-400">
     </div>
 </div>
+@elseif ($type == 'categories')
+<div class="mb-4 md:flex md:items-start">
+    <label for="type_id" class="md:w-1/4 font-medium text-gray-700">
+    Select Contents <span class="text-red-500">*</span>
+    </label>
+
+    <div class="md:w-1/4">
+        <select name="type_id[]" id="type_id" class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring focus:border-blue-400">
+          @foreach(\App\Models\Category::pluck('title', 'id') as $id => $title)
+            <option value="{{ $id }}" {{ in_array($id, old('type_id', [])) ? 'selected' : '' }}>
+              {{ $title }}
+            </option>
+          @endforeach
+        </select>
+        @error('type_id')
+        <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+        @enderror
+    </div>
+
+    <div class="md:w-1/4 mt-4 md:mt-0 md:ml-4">
+        <input type="text" name="search_txt" placeholder="Search..." onkeyup='searchByTitle("categories", this.value);' class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring focus:border-blue-400">
+    </div>
+</div>
+
+@elseif ($type == 'routes')
+<div class="mb-4 md:flex md:items-start">
+  <label for="type_id" class="md:w-1/3 font-medium text-gray-700">
+    Select Contents <span class="text-red-500">*</span>
+  </label>
+    <?php
+        $options = array(
+            '' => '- - - Select - - -',
+            '/' => 'Home',
+            'contact-us' => 'Contact Us',
+            'pages' => 'Pages',
+            'categories' => 'Categories',
+        );
+    ?>
+  <div class="md:w-2/3">
+    <select name="type_id" id="type_id"
+      onchange="updateRoute(this.value);"
+      class="w-full border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring focus:border-blue-400"
+    >
+       @foreach ($options as $id => $title)
+            <option value="{{ $id }}">{{ $title }}</option>
+        @endforeach
+    </select>
+
+    @error('type_id')
+      <p class="text-sm text-red-500 mt-1">{{ $message }}</p>
+    @enderror
+  </div>
+</div>
+
 
 @elseif ($type=='none')
 

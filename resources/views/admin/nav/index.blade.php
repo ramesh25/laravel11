@@ -6,7 +6,7 @@
   <div class="space-x-2">
     @if(isset($parent_id))
     <!-- Back Button -->
-    <a href="{{ url()->previous() }}" class="inline-flex items-center px-4 py-2 bg-cyan-600 text-white text-sm font-medium rounded hover:bg-cyan-700 transition">
+    <a href="{{ url('admin/nav') }}" class="inline-flex items-center px-4 py-2 bg-cyan-600 text-white text-sm font-medium rounded hover:bg-cyan-700 transition">
       <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
       </svg>
@@ -80,10 +80,8 @@
           <th class="px-4 py-2 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
         </tr>
       </thead>
-      <?php $sort_orders = '';?>
       <tbody class="bg-white divide-y divide-gray-200" id="tableBody">
         @foreach($models as $key => $m)
-        <?php $sort_orders.=$m->position.',';?>
         <tr>
           <td class="px-4 py-2">{{ ++$key }} <input type="checkbox" name="ids[]" value="{{ $m->id }}" class="rounded border-gray-300"></td>
           <td class="px-4 py-2">{{ $m->title }}</td>
@@ -115,20 +113,9 @@
 
 @endsection
 @section('script')
+<script src="{{ asset('admin/assets/js/common.js') }}"></script>
 <script src="{{ asset('admin/js/sort.js') }}" type="text/javascript"></script>
 <script>
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-        }
-    });
-    $(document).ready(function(){
-        $('#sortable').tableDnD({
-            onDrop: function(table, row) {
-                //alert($.tableDnD.serialize());
-                $.post('{{url("admin/ajax/drag-drop-sorting") }}', {ids_order: $.tableDnD.serialize(), sort_orders:'<?php echo $sort_orders;?>', table:'navs' } );
-            }
-        });
-    });
+ 
 </script>
 @endsection
