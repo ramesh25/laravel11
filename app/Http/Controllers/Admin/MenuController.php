@@ -65,7 +65,6 @@ class MenuController extends Controller
     {
         $title = $this->title. ' Management';
         $parent_id = Cache::get($this->remember_page) ? Cache::get($this->remember_page) : null;
-
           // breadcrumb
         $breadcrumb = ABS . '<a href="' . url($this->controller) . '">'. e($this->title) . '</a>';
         $breadcrumb .= ABS . ' / Create';
@@ -151,8 +150,8 @@ class MenuController extends Controller
     public function edit($id)
     {
         $title = $this->title. ' Edit';
-         $model = Menu::findOrFail($id);
-         $parent_id = $model->parent_id;
+        $model = Menu::findOrFail($id);
+        $parent_id = $model->parent_id;
          // breadcrumb
         $breadcrumb = $this->title;
         $breadcrumb .= ABS . ' / Update';
@@ -202,7 +201,7 @@ class MenuController extends Controller
                 case "categories":
                     $model->url = 'category/' . $data->slug;
                     break;
-            }
+        }
         $model->save();
         } else{   
         $model->fill($inputs);
@@ -224,7 +223,7 @@ class MenuController extends Controller
 
     public function bulkDelete(Request $request)
     {
-         $models = Menu::whereIn('id', $request->get('ids'))->get(array('id'));
+        $models = Menu::whereIn('id', $request->get('ids'))->get(array('id'));
         foreach ($models as $m) {
             $childs = Menu::where('parent_id', $m->id)->count();
             if ($childs > 0)
@@ -234,7 +233,6 @@ class MenuController extends Controller
 
         return redirect()->back()->with('success', '<span>Record has been Successfully Deleted</span>');
     }
-
 
     public function destroy($id)
     {
@@ -251,14 +249,17 @@ class MenuController extends Controller
 
         }
     }
+
     public function changeTypeCreate(Request $request) {
         $type = $request->get('type');
         return View::make('admin.nav.nav_type_partial_a', compact('type'));
     }
 
-    public function changeTypeUpdate(Request $request) {
+    public function changeTypeUpdate(Request $request, $id)
+    {
         $type = $request->get('type');
-        return View::make('admin.nav.nav_type_partial_e', compact('type'));
+        $model = Menu::find($id); // add this line
+        return view('admin.nav.nav_type_partial_e', compact('type', 'model'));
     }
 
     public function postSearchByTitleCreate(Request $request) {

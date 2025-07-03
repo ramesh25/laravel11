@@ -57,11 +57,11 @@
                 <label class="block text-sm font-medium text-gray-700 mb-1">Type</label>
                 <select name="type" id="type" class="w-full border rounded px-4 py-2" onchange="changeType(this.value)">
                     <option value="">-- Select --</option>
-                    <option value="none" {{ old('type', $model->type) == 'none' ? 'selected' : '' }}>None</option>
-                    <option value="pages" {{ old('type', $model->type) == 'pages' ? 'selected' : '' }}>Pages</option>
-                    <option value="categories" {{ old('type', $model->type) == 'categories' ? 'selected' : '' }}>Categories</option>
-                    <option value="routes" {{ old('type', $model->type) == 'routes' ? 'selected' : '' }}>Routes</option>
-                    <option value="link" {{ old('type', $model->type) == 'link' ? 'selected' : '' }}>Link</option>
+                    <option value="none" {{ old('type') == 'none' ? 'selected' : '' }}>None</option>
+                     <option value="pages" {{ old('type') == 'pages' ? 'selected' : '' }}>Pages</option>
+                    <option value="categories" {{ old('type') == 'categories' ? 'selected' : '' }}>Categories</option>
+                    <option value="routes" {{ old('type') == 'routes' ? 'selected' : '' }}>Routes</option>
+                    <option value="link" {{ old('type') == 'link' ? 'selected' : '' }}>Link</option>
                 </select>
                 @error('type') <div class="text-sm text-red-600">{{ $message }}</div> @enderror
             </div>
@@ -86,9 +86,9 @@
           </select>
           @error('publish') <p class="text-sm text-red-500 mt-1 w-full">{{ $message }}</p> @enderror
         </div>
-         <div class="mt-6">
+         
           <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">Update navs</button>
-        </div>
+       
       </div>
     </div>
   </div>
@@ -96,12 +96,8 @@
 @endsection
 
 @section('script')
-<script type="text/javascript" src="{{ asset('admin/js/jquery.blockUI.js') }}"></script>
 <script type="text/javascript">
-var type = document.getElementById('type').value;
-if (type == 'none' || type == 'routes' || type == 'link')
-{
-    document.getElementById('title_section').style.display = 'inline';
+    var type = document.getElementById('type').value;
     if (type == 'none')
     {
         document.getElementById('url').value = '';
@@ -109,18 +105,15 @@ if (type == 'none' || type == 'routes' || type == 'link')
     } else if (type == 'routes' || type == 'link')
     {
         document.getElementById('url_section').style.display = 'inline';
+    } else
+    {
+        document.getElementById('url').value = '';
+        document.getElementById('url_section').style.display = 'none';
     }
-} else
-{
-    document.getElementById('title').value = '';
-    document.getElementById('title_section').style.display = 'none';
-    document.getElementById('url').value = '';
-    document.getElementById('url_section').style.display = 'none';
-}
 
-function changeType(type)
-{   
-    $.blockUI({css: {
+      function changeType(type) {
+        $.blockUI({
+          css: {
             border: 'none',
             padding: '15px',
             backgroundColor: '#000',
@@ -128,63 +121,62 @@ function changeType(type)
             '-moz-border-radius': '10px',
             opacity: .5,
             color: '#fff'
-        },
-        message: '<h1>Please Wait...</h1>'
-    });
+          },
+          message: '<h1>Please Wait...</h1>'
+        });
+
+       if (type === 'none') {
+            const urlInput = document.getElementById('url');
+            const urlSection = document.getElementById('url_section');
+
+            if (urlInput) urlInput.value = '';
+            if (urlSection) urlSection.style.display = 'none';
+
+        } else if (type === 'routes' || type === 'link') {
+            const urlSection = document.getElementById('url_section');
+
+            if (urlSection) urlSection.style.display = 'inline';
+
+        } else {
+            const urlInput = document.getElementById('url');
+            const urlSection = document.getElementById('url_section');
+
+            if (urlInput) urlInput.value = '';
+            if (urlSection) urlSection.style.display = 'none';
+        }
 
 
-    if (type == 'none' || type == 'routes' || type == 'link')
+        $.post("change-type-update", {type: type, _token:'{!! csrf_token() !!}'}, function (data)
+        {
+            if (data != '' || data != undefined || data != null)
+            {
+                $('#group').html(data);
+                setTimeout($.unblockUI);
+            }
+        });
+    }
+
+    function updateRoute(route)
     {
-        document.getElementById('title_section').style.display = 'inline';
-        if (type == 'none')
+        document.getElementById('url').value = route;
+    }
+
+    function searchByTitle(type, search_txt)
+    {
+        if (!search_txt)
         {
             document.getElementById('url').value = '';
-            document.getElementById('url_section').style.display = 'none';
-        } else if (type == 'routes' || type == 'link')
-        {
-            document.getElementById('url_section').style.display = 'inline';
-        }
-    } else
-    {
-        document.getElementById('title').value = '';
-        document.getElementById('title_section').style.display = 'inline';
-        document.getElementById('url').value = '';
-        document.getElementById('url_section').style.display = 'none';
-    }
-
-    $.post("change-type-create", {type: type, _token:'{!! csrf_token() !!}'}, function (data)
-    {
-        if (data != '' || data != undefined || data != null)
-        {
-            $('#group').html(data);
             setTimeout($.unblockUI);
         }
-    });
-}
 
-
-function updateRoute(route)
-{
-    document.getElementById('url').value = route;
-}
-
-function searchByTitle(type, search_txt)
-{
-    if (!search_txt)
-    {
-        document.getElementById('url').value = '';
-        setTimeout($.unblockUI);
-    }
-
-    $.post("search-by-title-create", {type: type, search_txt: search_txt, _token:'{!! csrf_token() !!}'}, 
-
-        function (data)
-    {
-        if (data != '' || data != undefined || data != null)
+        $.post("search-by-title-update", {type: type, search_txt: search_txt, _token:'{!! csrf_token() !!}'}, function (data)
         {
-            $('#search_result').html(data);
-        }
-    });
-}
+            if (data != '' || data != undefined || data != null)
+            {
+                $('#search_result').html(data);
+            }
+        });
+    }
 </script>
+<script type="text/javascript" src="{{ asset('admin/js/jquery.blockUI.js') }}"></script>
 @endsection

@@ -1,7 +1,6 @@
 @extends('layouts.admin.master')
 @section('content')
 @include('admin.partials.breadcrumb')
-
 <div class="flex justify-between items-center mb-4">
   <!-- Left side: Back + Create -->
   <!-- <div class="space-x-2"> -->
@@ -34,7 +33,7 @@
 </div>
 @endif
 
-<div class="min-h-screen flex items-center justify-center bg-gray-100">
+<div class="max-h-screen flex items-center justify-center bg-gray-100">
   <form action="{{ route('nav.store') }}" method="POST" enctype="multipart/form-data" class="w-full max-w-6xl">
     @csrf
     <div class="grid grid-cols-1 md:grid-cols-12 gap-6"> 
