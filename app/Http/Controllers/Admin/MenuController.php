@@ -36,12 +36,12 @@ class MenuController extends Controller
 
         Cache::forget($this->remember_page);
 
-        $bredcrumb = ABS . $this->title;
+        $breadcrumb = ABS . $this->title;
         $models = Menu::with('submenu')
                 ->where('parent_id', 0)
                 ->orderBy('position', 'asc')->get();
 
-        return View::make($this->listing_page, compact('title', 'publish', 'bredcrumb', 'models'));
+        return View::make($this->listing_page, compact('title', 'publish', 'breadcrumb', 'models'));
     }
 
     public function category($id) {
@@ -49,9 +49,9 @@ class MenuController extends Controller
         $publish = $this->publish;
         //for return page
         Cache::forever($this->remember_page, $id);
-        //bredcrumb     
-        $bredcrumb = ABS . link_to($this->controller, $this->title);
-        $bredcrumb .= ABS . ' / ' .  BredcrumpHelper::admin($this->table, $id, $this->controller . '/sub');
+        //breadcrumb     
+        $breadcrumb = ABS . link_to($this->controller, $this->title);
+        $breadcrumb .= ABS . ' / ' .  BredcrumpHelper::admin($this->table, $id, $this->controller . '/sub');
 
         $models = Menu::with('submenu')
                 ->where('parent_id', $id)
@@ -59,7 +59,7 @@ class MenuController extends Controller
                 ->get();
          $parent_id = Cache::get($this->remember_page) ? Cache::get($this->remember_page) : null;
        
-        return view($this->listing_page, compact('title', 'publish', 'bredcrumb', 'models', 'parent_id'));
+        return view($this->listing_page, compact('title', 'publish', 'breadcrumb', 'models', 'parent_id'));
     }
     public function create()
     {
@@ -67,9 +67,9 @@ class MenuController extends Controller
         $parent_id = Cache::get($this->remember_page) ? Cache::get($this->remember_page) : null;
 
           // breadcrumb
-        $bredcrumb = ABS . '<a href="' . url($this->controller) . '">'. e($this->title) . '</a>';
-        $bredcrumb .= ABS . ' / Create';
-        // ✅ Add this line to fix $options undefined error
+        $breadcrumb = ABS . '<a href="' . url($this->controller) . '">'. e($this->title) . '</a>';
+        $breadcrumb .= ABS . ' / Create';
+        
     $options = [0 => 'None'] + \TreeHelper::selectOptions(
         'navs',
         $base_id = 0,
@@ -82,7 +82,7 @@ class MenuController extends Controller
                 ->where('parent_id', 0)
                 ->orderBy('position', 'asc')->get();
 
-        return View::make($this->create_form, compact('title', 'parent_id','bredcrumb','options'));
+        return View::make($this->create_form, compact('title', 'parent_id','breadcrumb','options'));
     }
 
     /**
@@ -155,12 +155,12 @@ class MenuController extends Controller
     {
         $title = $this->title. ' Edit';
 
-        //bredcrumb
-        $bredcrumb = ABS . link_to($this->controller, $this->title);
-        $bredcrumb .= ABS . ' / Update';
+        //breadcrumb
+        $breadcrumb = ABS . link_to($this->controller, $this->title);
+        $breadcrumb .= ABS . ' / Update';
 
         $model = Menu::find($id);
-        return View::make($this->update_form, compact('title', 'bredcrumb', 'model'));
+        return View::make($this->update_form, compact('title', 'breadcrumb', 'model'));
     }
 
     /**

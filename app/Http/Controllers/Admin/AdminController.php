@@ -33,10 +33,10 @@ class AdminController extends Controller
     {
         $title = $this->title. ' Management';
         $publish = $this->publish;
-        $bredcrumb = ABS . $this->title;
+        $breadcrumb = ABS . $this->title;
         $models = User::where('user_type', 1)->orderBy('id', 'desc')->get();
 
-        return view($this->listing_page, compact('title', 'models', 'bredcrumb', 'publish', 'title'));
+        return view($this->listing_page, compact('title', 'models', 'breadcrumb', 'publish', 'title'));
     }
 
     /**
@@ -49,11 +49,11 @@ class AdminController extends Controller
     public function create()
     {
         $title = $this->title . ' Create';
-        $bredcrumb = $this->title;
-        $bredcrumb .= ABS . ' / Create';
+        $breadcrumb = $this->title;
+        $breadcrumb .= ABS . ' / Create';
         $publish = $this->publish;
         $roles = Role::pluck('name','name')->all();
-        return view($this->create_form, compact('title', 'bredcrumb', 'publish', 'roles'));
+        return view($this->create_form, compact('title', 'breadcrumb', 'publish', 'roles'));
     }
 
     /**
@@ -96,15 +96,15 @@ class AdminController extends Controller
     {
         $title = $this->title . ' Profile';
         $publish = $this->publish;
-        $bredcrumb = $this->title;
-        $bredcrumb .= ABS . ' / Profile';
+        $breadcrumb = $this->title;
+        $breadcrumb .= ABS . ' / Profile';
 
         $model = Auth::user()->where('id', $id)
                 ->firstOrFail();
         $models = User::orderBy('id', 'desc')->get();
         $roles = Role::pluck('name','name')->all();
         $userRole = $model->roles->pluck('name','name')->all();
-        return view($this->listing_profile, compact('title','publish', 'bredcrumb', 'model', 'models', 'roles', 'userRole'));
+        return view($this->listing_profile, compact('title','publish', 'breadcrumb', 'model', 'models', 'roles', 'userRole'));
     }
 
 
@@ -122,15 +122,15 @@ class AdminController extends Controller
     public function edit($id)
     {
         $title = $this->title. ' Edit';
-        $bredcrumb = $this->title;
-        $bredcrumb .= ABS . ' / Update';
+        $breadcrumb = $this->title;
+        $breadcrumb .= ABS . ' / Update';
 
         $model = User::where('id', $id)
                 ->firstOrFail();
         $roles = Role::with('roles')->pluck('name','name')->all();
         $userRole = $model->roles->pluck('name','name')->all();
         // dd($userRole);
-        return view($this->update_form, compact('title', 'bredcrumb', 'model', 'roles', 'userRole'));
+        return view($this->update_form, compact('title', 'breadcrumb', 'model', 'roles', 'userRole'));
     }
 
     /**

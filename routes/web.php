@@ -39,9 +39,7 @@ Route::resource('admin/nav', MenuController::class,['except'=> ['show','destroy'
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
 ])->group(function () {
 
-    Route::get('/admin/dashboard', function () {
-        return view('admin.dashboard');
-    })->name('dashboard');
+    Route::get('admin/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('admin.dashboard');
 
     Route::resource('admin/admin', \App\Http\Controllers\Admin\AdminController::class);
     Route::get('admin/profile/{id}', [\App\Http\Controllers\Admin\AdminController::class, 'getProfile']);

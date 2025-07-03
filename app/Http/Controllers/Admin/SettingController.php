@@ -22,11 +22,11 @@ class SettingController extends Controller
     public function index()
     {
         $title = $this->title. 'Management';
-        //bredcrumb
-        $bredcrumb = ABS . 'Settings';
+        //breadcrumb
+        $breadcrumb = ABS . 'Settings';
         $model = Setting::first();
         // dd($model);
-        return view($this->update_form, compact('title','bredcrumb', 'model'));
+        return view($this->update_form, compact('title','breadcrumb', 'model'));
     }
 
     

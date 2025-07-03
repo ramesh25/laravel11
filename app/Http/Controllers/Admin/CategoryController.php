@@ -30,7 +30,7 @@ class CategoryController extends Controller
     public function index()
     {
         $title = $this->title. ' Management';
-        $bredcrumb = $this->title;
+        $breadcrumb = $this->title;
         Cache::forget($this->remember_page);
         $publish = $this->publish;
 
@@ -39,7 +39,7 @@ class CategoryController extends Controller
         ->orderBy('position', 'desc')
         ->paginate(10);
 
-        return view($this->listing_page, compact('title', 'models', 'bredcrumb', 'publish', 'title'));
+        return view($this->listing_page, compact('title', 'models', 'breadcrumb', 'publish', 'title'));
     }
 
     public function child($id) {
@@ -62,10 +62,10 @@ class CategoryController extends Controller
     {
         $title = $this->title. ' Create';
         $parent_id = Cache::get($this->remember_page) ? Cache::get($this->remember_page) : null;
-        $bredcrumb = 'Cagetory';
-        $bredcrumb .= ' / Create';
+        $breadcrumb = 'Cagetory';
+        $breadcrumb .= ' / Create';
         $publish = $this->publish;
-        return view($this->create_form, compact('title','parent_id', 'bredcrumb', 'publish'));
+        return view($this->create_form, compact('title','parent_id', 'breadcrumb', 'publish'));
     }
 
     /**
@@ -124,11 +124,11 @@ class CategoryController extends Controller
     {
         $title = $this->title. ' Edit';
         $parent_id = null;
-        $bredcrumb = $this->title;
-        $bredcrumb .= ' / Update';
+        $breadcrumb = $this->title;
+        $breadcrumb .= ' / Update';
 
         $model = Category::find($id);
-        return view($this->update_form, compact('title','parent_id', 'bredcrumb', 'model'));
+        return view($this->update_form, compact('title','parent_id', 'breadcrumb', 'model'));
     }
 
     /**

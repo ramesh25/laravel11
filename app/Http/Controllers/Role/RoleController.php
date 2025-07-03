@@ -21,8 +21,8 @@ class RoleController extends Controller
     {
         $models = Role::orderBy('id','DESC')->get();
          $title = $this->title. ' Management';
-        $bredcrumb = ABS . $this->title;
-        return view('admin.role.role_index',compact('models','title', 'bredcrumb'))
+        $breadcrumb = ABS . $this->title;
+        return view('admin.role.role_index',compact('models','title', 'breadcrumb'))
             ->with('i', ($request->input('page', 1) - 1) * 5);
     }
 
@@ -36,9 +36,9 @@ class RoleController extends Controller
     {
         $permission = Permission::get();
         $title = $this->title. ' Create';
-        $bredcrumb = $this->title;
-        $bredcrumb .= ABS . ' / Create';
-        return view('admin.role.role_create',compact('permission', 'title', 'bredcrumb'));
+        $breadcrumb = $this->title;
+        $breadcrumb .= ABS . ' / Create';
+        return view('admin.role.role_create',compact('permission', 'title', 'breadcrumb'));
     }
 
 
@@ -71,8 +71,8 @@ class RoleController extends Controller
             ->get();
 
         $title = $this->title. ' Detail';
-        $bredcrumb = ABS . $this->title;
-        return view('admin.role.role_show',compact('role','rolePermissions', 'title', 'bredcrumb'));
+        $breadcrumb = ABS . $this->title;
+        return view('admin.role.role_show',compact('role','rolePermissions', 'title', 'breadcrumb'));
     }
 
 
@@ -90,10 +90,10 @@ class RoleController extends Controller
             ->pluck('role_has_permissions.permission_id','role_has_permissions.permission_id')
             ->all();
         $title = $this->title. ' Edit';
-        $bredcrumb = $this->title;
-        $bredcrumb .= ABS . ' / Update';
+        $breadcrumb = $this->title;
+        $breadcrumb .= ABS . ' / Update';
 
-        return view('admin.role.role_edit',compact('model','permission','rolePermissions', 'title', 'bredcrumb'));
+        return view('admin.role.role_edit',compact('model','permission','rolePermissions', 'title', 'breadcrumb'));
     }
 
 

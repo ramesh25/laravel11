@@ -20,7 +20,7 @@ function filterTableAndResetPagination() {
 }
 
 let currentPage = 1;
-const rowsPerPage = 5;
+const rowsPerPage = 15;
 
 function renderTable() {
   const tbody = document.getElementById("tableBody");
