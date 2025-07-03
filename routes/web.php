@@ -10,32 +10,6 @@ Route::get('/', function () {
 });
 
 
-
-//advertise
-Route::resource('admin/advertise',AdvertiseController::class);
-Route::get('admin/advertise/single-delete/{id}', [AdvertiseController::class, 'destroy']);
-Route::post('admin/advertise/update-publish/{publish}', [AdvertiseController::class,'postUpdatePublish']);
-Route::post('admin/advertise/bulk_delete', [AdvertiseController::class,'bulkDelete']);
-
-//Navbar
-Route::get('admin/nav/sub/{id}', [MenuController::class,'category'])->name('admin.nav.sub');
-
-Route::post('admin/nav/update-publish/{publish}', [MenuController::class,'postUpdatePublish'])->name('admin.nav.update.publish');
-
-Route::post('admin/nav/change-type-create', [MenuController::class,'changeTypeCreate'])->name('admin.nav.changeTypeCreate');
-
-Route::post('admin/nav/{id}/change-type-update',[MenuController::class,'changeTypeUpdate'])->name('admin.nav.changeTypeUpdate');
-
-Route::post('admin/nav/search-by-title-create',[MenuController::class,'postSearchByTitleCreate']);
-
-Route::post('admin/nav/{id}/search-by-title-update',[MenuController::class,'postSearchByTitleUpdate'])->name('admin.nav.postSearchByTitleUpdate');
-
-Route::get('admin/nav/single-delete/{id}', [MenuController::class,'destroy']);
-Route::post('admin/nav/bulk-delete', [MenuController::class,'bulkDelete'])->name('admin.nav.bulkDelete');
-
-Route::resource('admin/nav', MenuController::class,['except'=> ['show','destroy']]);
-
-
 Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
 ])->group(function () {
 
@@ -74,6 +48,30 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
 
     Route::get('admin/setting/{id}', [\App\Http\Controllers\Admin\SettingController::class, 'update']);
 
+    //advertise
+    Route::resource('admin/advertise',AdvertiseController::class);
+    Route::get('admin/advertise/single-delete/{id}', [AdvertiseController::class, 'destroy']);
+    Route::post('admin/advertise/update-publish/{publish}', [AdvertiseController::class,'postUpdatePublish']);
+    Route::post('admin/advertise/bulk_delete', [AdvertiseController::class,'bulkDelete']);
+
+    //Navbar
+
+        Route::get('admin/nav/sub/{id}', [MenuController::class,'category'])->name('admin.nav.sub');
+
+    Route::post('admin/nav/update-publish/{publish}', [MenuController::class,'postUpdatePublish'])->name('admin.nav.update.publish');
+
+    Route::post('admin/nav/change-type-create', [MenuController::class,'changeTypeCreate'])->name('admin.nav.changeTypeCreate');
+
+    Route::post('admin/nav/{id}/change-type-update',[MenuController::class,'changeTypeUpdate'])->name('admin.nav.changeTypeUpdate');
+
+    Route::post('admin/nav/search-by-title-create',[MenuController::class,'postSearchByTitleCreate']);
+
+    Route::post('admin/nav/{id}/search-by-title-update',[MenuController::class,'postSearchByTitleUpdate'])->name('admin.nav.postSearchByTitleUpdate');
+
+    Route::get('admin/nav/single-delete/{id}', [MenuController::class,'destroy']);
+    Route::post('admin/nav/bulk_delete', [MenuController::class,'bulkDelete'])->name('admin.nav.bulkDelete');
+
+    Route::resource('admin/nav', MenuController::class,['except'=> ['show','destroy']]);
 
     //Routes for Role & Permissions
     Route::resource('admin/roles', \App\Http\Controllers\Role\RoleController::class);

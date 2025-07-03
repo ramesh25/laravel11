@@ -23,7 +23,7 @@ class MenuController extends Controller
     private $listing_page = 'admin.nav.index';
     private $create_form = 'admin.nav.nav_a';
     private $update_form = 'admin.nav.nav_e';
-   
+
     private $publish = array(
     '0'=>'<span class="px-3 py-1 bg-red-500 text-white text-xs rounded hover:bg-red-600">Inactive</span>', 
     '1'=>'<span class="px-3 py-1 bg-cyan-600 text-white text-xs rounded hover:bg-cyan-600">Active</span>',
@@ -58,6 +58,7 @@ class MenuController extends Controller
                 ->orderBy('position', 'asc')
                 ->get();
          $parent_id = Cache::get($this->remember_page) ? Cache::get($this->remember_page) : null;
+        // dd($parent_id);
        
         return view($this->listing_page, compact('title', 'publish', 'breadcrumb', 'models', 'parent_id'));
     }
@@ -65,23 +66,17 @@ class MenuController extends Controller
     {
         $title = $this->title. ' Management';
         $parent_id = Cache::get($this->remember_page) ? Cache::get($this->remember_page) : null;
+<<<<<<< HEAD
           // breadcrumb
         $breadcrumb = ABS . '<a href="' . url($this->controller) . '">'. e($this->title) . '</a>';
-        $breadcrumb .= ABS . ' / Create';
-        // // ✅ Add this line to fix $options undefined error
-        $options = [0 => 'None'] + \TreeHelper::selectOptions(
-            'navs',
-            $base_id = 0,
-            $id = null,
-            $terms = null,
-            $order_by = 'title',
-            $order = 'asc'
-        );
-        $models = Menu::with('submenu')
-                ->where('parent_id', 0)
-                ->orderBy('position', 'asc')->get();
+=======
 
-        return View::make($this->create_form, compact('title', 'parent_id','breadcrumb','options'));
+        //breadcrumb
+        $breadcrumb = $this->title;
+>>>>>>> bfd01890a1eee70204516a04d52148c71f01ee89
+        $breadcrumb .= ABS . ' / Create';
+
+        return View::make($this->create_form, compact('title', 'parent_id', 'breadcrumb'));
     }
 
     /**
@@ -95,7 +90,7 @@ class MenuController extends Controller
         $model = new Menu($request->all());
         $validator = Validator::make($request->all(), [
             "type" => "required",
-            "type_id" => "required_if:type,pages|required_if:type,categories|required_if:type,pcats|required_if:type,routes",
+            "type_id" => "required_if:type,pages|required_if:type,categories|required_if:type,routes",
             "title" => "required_if:type,none|required_if:type,link|required_if:type,routes|required_if:type,other",
             "url" => "required_if:type,routes|required_if:type,link|required_if:type,other",
         ]);
@@ -150,22 +145,19 @@ class MenuController extends Controller
     public function edit($id)
     {
         $title = $this->title. ' Edit';
+<<<<<<< HEAD
         $model = Menu::findOrFail($id);
         $parent_id = $model->parent_id;
          // breadcrumb
+=======
+
+        //breadcrumb
+>>>>>>> bfd01890a1eee70204516a04d52148c71f01ee89
         $breadcrumb = $this->title;
         $breadcrumb .= ABS . ' / Update';
-        // Options for parent select dropdown
-        $options = [0 => 'None'] + \TreeHelper::selectOptions(
-            'navs',
-            $base_id = 0,
-            $id = null,
-            $terms = null,
-            $order_by = 'title',
-            $order = 'asc'
-        );
-        return View::make($this->update_form, compact('title',
-            'parent_id','breadcrumb', 'model','options'));
+
+        $model = Menu::find($id);
+        return View::make($this->update_form, compact('title', 'breadcrumb', 'model'));
     }
 
     /**
@@ -179,11 +171,11 @@ class MenuController extends Controller
     {
         $inputs = $request->all();
         $model = Menu::find($id);
-       // dd($request->all());
+       
         $model->fill($inputs);
         $validator = Validator::make($request->all(), [
             "type" => "required",
-            "type_id" => "required_if:type,pages|required_if:type,categories|required_if:type,pcats",
+            "type_id" => "required_if:type,pages|required_if:type,categories",
             "title" => "required",
             "url" => "required_if:type,routes|required_if:type,other",
         ]);
@@ -191,9 +183,7 @@ class MenuController extends Controller
             return Redirect::back()->withErrors($validator)->withInput();
         }
         if (in_array($request->get('type'), array('pages', 'categories'))) {
-            
             $data = DB::table($request->get('type'))->where('id', $request->get('type_id'))->take(1)->first(array('slug', 'title'));
-            
             switch ($request->get('type')) {
                 case "pages":
                     $model->url = 'page/' . $data->slug;

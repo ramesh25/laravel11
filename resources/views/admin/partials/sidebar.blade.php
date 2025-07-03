@@ -31,11 +31,19 @@
       @can('news')
       <a href="{{ url('admin/news') }}" class="block px-4 py-2 rounded hover:bg-gray-200">News</a>
       @endcan
-     
       <!-- Dropdown -->
       <div>
         <button onclick="toggleDropdown('settingDropdown')" class="w-full text-left px-4 py-2 rounded hover:bg-gray-200">Setting ▼</button>
         <div id="settingDropdown" class="ml-4 mt-1 space-y-1 hidden">
+          @can('social')
+          <a href="{{ url('admin/roles') }}" class="block px-4 py-1 rounded hover:bg-gray-200">Roles</a>
+          @endcan
+          @can('social')
+          <a href="{{ url('admin/setting') }}" class="block px-4 py-1 rounded hover:bg-gray-200">Setting</a>
+          @endcan
+          @can('social')
+          <a href="{{ url('admin/social') }}" class="block px-4 py-1 rounded hover:bg-gray-200">Social</a>
+          @endcan
            @can('role')
           <a href="{{ url('admin/roles') }}" class="block px-4 py-1 rounded hover:bg-gray-200">Roles</a>
            @endcan
