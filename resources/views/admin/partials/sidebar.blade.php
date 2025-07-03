@@ -10,7 +10,12 @@
   <div class="p-4 text-lg font-bold border-b">Admin Panel</div>
     
     <nav class="p-4 space-y-2">
+      @can('dashboard')
       <a href="{{ url('admin/dashboard') }}" class="block px-4 py-2 rounded hover:bg-gray-200">Dashboard</a>
+<<<<<<< HEAD
+=======
+      @endcan
+>>>>>>> 0dd5e1624b3f993759dfa50f0255d37b18785ffa
       @can('menu')
       <a href="{{ url('admin/nav') }}" class="block px-4 py-2 rounded hover:bg-gray-200">Menu</a>
       @endcan
@@ -29,10 +34,15 @@
       @can('news')
       <a href="{{ url('admin/news') }}" class="block px-4 py-2 rounded hover:bg-gray-200">News</a>
       @endcan
+<<<<<<< HEAD
+=======
+     
+>>>>>>> 0dd5e1624b3f993759dfa50f0255d37b18785ffa
       <!-- Dropdown -->
       <div>
         <button onclick="toggleDropdown('settingDropdown')" class="w-full text-left px-4 py-2 rounded hover:bg-gray-200">Setting ▼</button>
         <div id="settingDropdown" class="ml-4 mt-1 space-y-1 hidden">
+<<<<<<< HEAD
           @can('social')
           <a href="{{ url('admin/roles') }}" class="block px-4 py-1 rounded hover:bg-gray-200">Roles</a>
           @endcan
@@ -42,6 +52,17 @@
           @can('social')
           <a href="{{ url('admin/social') }}" class="block px-4 py-1 rounded hover:bg-gray-200">Social</a>
           @endcan
+=======
+           @can('role')
+          <a href="{{ url('admin/roles') }}" class="block px-4 py-1 rounded hover:bg-gray-200">Roles</a>
+           @endcan
+           @can('setting')
+          <a href="{{ url('admin/setting') }}" class="block px-4 py-1 rounded hover:bg-gray-200">Setting</a>
+           @endcan
+           @can('social')
+          <a href="{{ url('admin/social') }}" class="block px-4 py-1 rounded hover:bg-gray-200">Social</a>
+           @endcan
+>>>>>>> 0dd5e1624b3f993759dfa50f0255d37b18785ffa
         </div>
       </div>
     </nav>

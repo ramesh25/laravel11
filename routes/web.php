@@ -18,7 +18,7 @@ Route::post('admin/advertise/update-publish/{publish}', [AdvertiseController::cl
 Route::post('admin/advertise/bulk_delete', [AdvertiseController::class,'bulkDelete']);
 
 //Navbar
-Route::post('admin/nav/sub/{id}', [MenuController::class,'category'])->name('admin.nav.sub');
+Route::get('admin/nav/sub/{id}', [MenuController::class,'category'])->name('admin.nav.sub');
 
 Route::post('admin/nav/update-publish/{publish}', [MenuController::class,'postUpdatePublish'])->name('admin.nav.update.publish');
 

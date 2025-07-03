@@ -1,5 +1,4 @@
 @extends('layouts.admin.master')
-
 @section('content')
 @include('admin.partials.breadcrumb')
 
@@ -43,65 +42,164 @@
       <div class="md:col-span-8">
         <div class="bg-white p-6 rounded shadow">
           <h2 class="text-lg font-semibold text-gray-700 mb-4">Nav Information</h2>
-          <!-- Parent -->
-        <div class="mb-4">
-          <label class="block text-sm font-medium text-gray-700 mb-1">Parent</label>
-          <select name="parent_id" class="w-full border rounded px-4 py-2 focus:ring focus:border-blue-400">
-            @foreach($options as $value => $label)
-              <option value="{{ $value }}" {{ $parent_id == $value ? 'selected' : '' }}>{{ $label }}</option>
-            @endforeach
-          </select>
-          @error('parent_id') <p class="text-sm text-red-500 mt-1">{{ $message }}</p> @enderror
-        </div>
-         <!-- Type -->
-      <div class="mb-4">
-        <label class="block text-sm font-medium text-gray-700 mb-1">Type</label>
-        <select name="type" id="type" onchange="changeType(this.value)" class="w-full border rounded px-4 py-2 focus:ring focus:border-blue-400">
-          <option value="">--- Select ---</option>
-          <option value="none">None</option>
-          <option value="pages">Pages</option>
-          <option value="categories">Categories</option>
-          <option value="blogs">Blogs</option>
-          <option value="routes">Routes</option>
-          <option value="link">Link</option>
-        </select>
-        @error('type') <p class="text-sm text-red-500 mt-1">{{ $message }}</p> @enderror
-      </div>
-      <!-- Type Partial -->
-      <div class="mb-4" id="group">
-        @include('admin.nav.nav_type_partial_a')
-      </div>
-
-          <!-- Title -->
-          <div class="mb-4">
-            <label class="block text-sm font-medium text-gray-700 mb-1">Title <span class="text-red-500">*</span></label>
-            <input type="text" name="title" value="{{ old('title') }}" class="w-full border rounded px-4 py-2 focus:ring focus:border-blue-400" >
-            @error('title') <p class="text-sm text-red-500 mt-1">{{ $message }}</p> @enderror
-          </div>
-          <!-- URL -->
-      <div class="mb-4" id="url_section">
-        <label class="block text-sm font-medium text-gray-700 mb-1">URL</label>
-        <input type="text" name="url" id="url" class="w-full border rounded px-4 py-2" placeholder="URL" value="{{ old('url') }}">
-        @error('url') <p class="text-sm text-red-500 mt-1">{{ $message }}</p> @enderror
-      </div>
-
-          <!-- Publish Dropdown -->
-          <div class="mb-4 flex items-center">
-            <label class="text-sm font-medium text-gray-700 mr-4 w-24">Status</label>
-            <select name="publish" class="flex-1 border rounded px-4 py-2 focus:ring focus:border-blue-400">
-              <option value="1" {{ old('publish', '1') == '1' ? 'selected' : '' }}>Publish</option>
-              <option value="0" {{ old('publish') == '0' ? 'selected' : '' }}>Unpublish</option>
-            </select>
-            @error('publish') <p class="text-sm text-red-500 mt-1 w-full">{{ $message }}</p> @enderror
-          </div>
-
-          <div class="mt-6">
-            <button type="submit" class="bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700">Save nav</button>
-          </div>
-        </div>
-        
+              <!-- Parent -->
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Parent</label>
+                <select name="parent_id" class="w-full border rounded px-4 py-2">
+                    @foreach($options as $key => $value)
+                        <option value="{{ $key }}" {{ old('parent_id', $parent_id) == $key ? 'selected' : '' }}>{{ $value }}</option>
+                    @endforeach
+                </select>
+                @error('parent_id') <div class="text-sm text-red-600">{{ $message }}</div> @enderror
+            </div>
+            <!-- Type -->
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Type</label>
+                <select name="type" id="type" class="w-full border rounded px-4 py-2" onchange="changeType(this.value)">
+                    <option value="">-- Select --</option>
+                    <option value="none" {{ old('type') == 'none' ? 'selected' : '' }}>None</option>
+                    <option value="pages" {{ old('type') == 'pages' ? 'selected' : '' }}>Pages</option>
+                    <option value="categories" {{ old('type') == 'categories' ? 'selected' : '' }}>Categories</option>
+                    <option value="routes" {{ old('type') == 'routes' ? 'selected' : '' }}>Routes</option>
+                    <option value="link" {{ old('type') == 'link' ? 'selected' : '' }}>Link</option>
+                </select>
+                @error('type') <div class="text-sm text-red-600">{{ $message }}</div> @enderror
+            </div>
+            <!-- Type Partial -->
+            <div class="mb-4" id="group">
+              @include('admin.nav.nav_type_partial_a')
+            </div>
+            <!-- Title -->
+            <div id="title_section" class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Title</label>
+                <input type="text" name="title" id="title" value="{{ old('title') }}" class="w-full border rounded px-4 py-2" />
+                @error('title') <div class="text-sm text-red-600">{{ $message }}</div> @enderror
+            </div>
+            <!-- URL -->
+            <div id="url_section" class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1">URL</label>
+                <input type="text" name="url" id="url" value="{{ old('url') }}" class="w-full border rounded px-4 py-2" />
+                @error('url') <div class="text-sm text-red-600">{{ $message }}</div> @enderror
+            </div>
+            <!-- Target -->
+            <div class="mb-4">
+                <span class="block text-sm font-medium text-gray-700 mb-1">New Page</span>
+                <label class="inline-flex items-center mr-4">
+                    <input type="radio" name="target" value="1" class="form-radio" {{ old('target') == '1' ? 'checked' : '' }}> <span class="ml-2">Yes</span>
+                </label>
+                <label class="inline-flex items-center">
+                    <input type="radio" name="target" value="0" class="form-radio" {{ old('target', '0') == '0' ? 'checked' : '' }}> <span class="ml-2">No</span>
+                </label>
+            </div>
+            <!-- Right Section -->
+            <!-- <div class="bg-white p-6 rounded shadow"> -->
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                <select name="publish" class="w-full border rounded px-4 py-2">
+                    <option value="1" {{ old('publish', '1') == '1' ? 'selected' : '' }}>Active</option>
+                    <option value="0" {{ old('publish') == '0' ? 'selected' : '' }}>Inactive</option>
+                </select>
+                @error('publish') <div class="text-sm text-red-600">{{ $message }}</div> @enderror
+            </div>
+            <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded">Submit
+            </button>
+           <!-- </div> -->
+        </div> 
       </div>
     </div> 
   </form>
 </div>
+@endsection
+@section('script')
+<script type="text/javascript" src="{{ asset('admin/js/jquery.blockUI.js') }}"></script>
+<script type="text/javascript">
+var type = document.getElementById('type').value;
+if (type == 'none' || type == 'routes' || type == 'link')
+{
+    document.getElementById('title_section').style.display = 'inline';
+    if (type == 'none')
+    {
+        document.getElementById('url').value = '';
+        document.getElementById('url_section').style.display = 'none';
+    } else if (type == 'routes' || type == 'link')
+    {
+        document.getElementById('url_section').style.display = 'inline';
+    }
+} else
+{
+    document.getElementById('title').value = '';
+    document.getElementById('title_section').style.display = 'none';
+    document.getElementById('url').value = '';
+    document.getElementById('url_section').style.display = 'none';
+}
+
+function changeType(type)
+{   
+    $.blockUI({css: {
+            border: 'none',
+            padding: '15px',
+            backgroundColor: '#000',
+            '-webkit-border-radius': '10px',
+            '-moz-border-radius': '10px',
+            opacity: .5,
+            color: '#fff'
+        },
+        message: '<h1>Please Wait...</h1>'
+    });
+
+
+    if (type == 'none' || type == 'routes' || type == 'link')
+    {
+        document.getElementById('title_section').style.display = 'inline';
+        if (type == 'none')
+        {
+            document.getElementById('url').value = '';
+            document.getElementById('url_section').style.display = 'none';
+        } else if (type == 'routes' || type == 'link')
+        {
+            document.getElementById('url_section').style.display = 'inline';
+        }
+    } else
+    {
+        document.getElementById('title').value = '';
+        document.getElementById('title_section').style.display = 'inline';
+        document.getElementById('url').value = '';
+        document.getElementById('url_section').style.display = 'none';
+    }
+
+    $.post("change-type-create", {type: type, _token:'{!! csrf_token() !!}'}, function (data)
+    {
+        if (data != '' || data != undefined || data != null)
+        {
+            $('#group').html(data);
+            setTimeout($.unblockUI);
+        }
+    });
+}
+
+
+function updateRoute(route)
+{
+    document.getElementById('url').value = route;
+}
+
+function searchByTitle(type, search_txt)
+{
+    if (!search_txt)
+    {
+        document.getElementById('url').value = '';
+        setTimeout($.unblockUI);
+    }
+
+    $.post("search-by-title-create", {type: type, search_txt: search_txt, _token:'{!! csrf_token() !!}'}, 
+
+        function (data)
+    {
+        if (data != '' || data != undefined || data != null)
+        {
+            $('#search_result').html(data);
+        }
+    });
+}
+</script>
 @endsection

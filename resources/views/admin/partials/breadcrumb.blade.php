@@ -17,7 +17,11 @@
         <svg class="w-4 h-4 text-gray-400 mx-2" fill="currentColor" viewBox="0 0 20 20">
           <path d="M7.05 4.05a.5.5 0 000 .707L11.293 9.5 7.05 13.743a.5.5 0 00.707.707l4.95-4.95a1 1 0 000-1.414l-4.95-4.95a.5.5 0 00-.707 0z" />
         </svg>
+<<<<<<< HEAD
         <a href="#" class="text-gray-600 hover:text-blue-600"></a>
+=======
+        <a href="#" class="text-gray-600 hover:text-blue-600">{{ $breadcrumb }}</a>
+>>>>>>> 0dd5e1624b3f993759dfa50f0255d37b18785ffa
       </div>
     </li>
 

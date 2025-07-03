@@ -21,8 +21,13 @@ class PermissionRequest extends FormRequest
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
     public function rules(): array
+<<<<<<< HEAD
     {
         $permissionId = $this->route('permission'); // or $this->permission
+=======
+    {   
+        $permissionId = $this->route('permission');
+>>>>>>> 0dd5e1624b3f993759dfa50f0255d37b18785ffa
         return [
              'name' => [
                 'required',

@@ -21,7 +21,11 @@ class PermissionController extends Controller
          $title = $this->title. ' Management';
         $breadcrumb = ABS . $this->title;
         return view('admin.role.permission_index',compact('models','title', 'breadcrumb'))
+<<<<<<< HEAD
             ->with('i', ($request->input('page', 1) - 1) * 5);
+=======
+            ->with('i', ($request->input('page', 1) - 1) * 10);
+>>>>>>> 0dd5e1624b3f993759dfa50f0255d37b18785ffa
     }
 
 

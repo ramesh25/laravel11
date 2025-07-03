@@ -84,7 +84,7 @@
 
           <td class="px-4 py-2 text-right space-x-2">
             <a href="{{ route('admin.edit',$m->id) }}" class="px-3 py-1 bg-blue-500 text-white text-xs rounded hover:bg-blue-600">Edit</a>
-            {!! $publish[$m->publish] !!}
+            {!! $publish[$m->publish] ?? '' !!}
             @if(\Auth::check() && \Auth::user()->id == $m->id)
             <a></a>
             @else            

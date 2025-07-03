@@ -4,10 +4,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Input;
+use App\Traits\HasPosition;
 
 class Menu extends Model
 {
-    use HasFactory;
+    use HasFactory, HasPosition;
     protected $table = 'navs';
     protected $guarded = array('id', 'created_at', 'updated_at', 'search_txt');
 
